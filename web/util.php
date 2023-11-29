@@ -3,7 +3,7 @@
 include "config.php";
 ignore_user_abort(true);
 set_time_limit(0);
-setlocale(LC_TIME, 'de_DE@euro', 'de_DE', 'de', 'ge');
+setlocale(LC_TIME, "de_DE@euro", "de_DE", "de", "ge");
 
 $dataFileName = dirname(__FILE__) . "/data.json";
 
@@ -20,7 +20,7 @@ function getCurrentGamesByDateAndIsHomeGame($weeks): array
             continue;
         } else {
             $time = $game->date->getTimestamp();
-            $regex = "#" . getenv('CLUB_NAME') . "( [123])?#";
+            $regex = "#" . getenv("CLUB_NAME") . "( [123])?#";
             $game->isHomeGame = preg_match($regex, $game->gHomeTeam);
 
             if (!isset($currentGamesByDateAndIsHomeGame[$time])) {
@@ -104,17 +104,34 @@ function isInParkringhalle($game)
     return $game->gGymnasiumID === "666";
 }
 
-function createTeamToggleButton($team): string
+function teamButtonURL($team): string
 {
+    $params = $_GET;
+    if (!isset($params["teams"])) {
+        $params["teams"] = array();
+    }
+
+    if (($key = array_search($team->teamID, $params["teams"])) !== false) {
+        unset($params["teams"][$key]);
+    } else {
+        $params["teams"][] = $team->teamID;
+    }
+
+    return http_build_query($params);
+}
+
+function createTeamToggleButton($team, $teams_filter): string
+{
+    $url = "?" . teamButtonURL($team);
+    $active = (in_array($team->teamID, $teams_filter)) ? " active" : "";
     return <<<HTML
-<button type="button" class="btn btn-block btn-$team->color team-toggle" data-team-id="$team->teamID">$team->name</button>
+<a class="btn btn-block btn-$team->color$active" href="$url">$team->name</a>
 HTML;
 }
 
 function createWeeksButton($weeks_option, $weeks_active): string
 {
-    $active = ($weeks_option === $weeks_active) ? ' active' : '';
-    #$url = '?' . teamButtonURL($team);
+    $active = ($weeks_option === $weeks_active) ? " active" : "";
     return <<<HTML
 <a class="btn btn-default$active" href="?weeks=$weeks_option">nächste $weeks_option Wochen</a>
 HTML;
@@ -142,7 +159,7 @@ function createGameHTML($game): string
     $locationLabel = createLocationLabel($game);
     $teamLabel = createTeamLabel($game->teamID);
     return <<<HTML
-    <li class="list-group-item game-list-item" data-team-id="{$game->teamID}">
+    <li class="list-group-item game-list-item">
         <strong>$game->gTime Uhr</strong>&nbsp;<span>$game->gClassSname:</span>
         <span>$game->gHomeTeam</span> - <span>$game->gGuestTeam</span>
         <br/>

@@ -1,4 +1,17 @@
-<?php require("util.php"); ?>
+<?php
+
+require("util.php");
+
+$weeks_options = array(2, 40);
+$weeks_active = $weeks_options[0];
+if (isset($_GET['weeks']) && in_array($_GET['weeks'], $weeks_options)) {
+    $weeks_active = $_GET['weeks'];
+}
+
+$teams_filter = $_GET['teams'] ?? array();
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,33 +36,24 @@
                 </div>
                 <div id="team-toggle-buttons" class="panel-body row collapse">
 <?php foreach (getTeams() as $team) { ?>
-                <?php echo '<div class="col-xs-6 col-sm-2" style="margin-top: 20px">' . "\n"; ?>
-                    <?php echo createTeamToggleButton($team) . "\n";?>
-                <?php echo '</div>' . "\n";
-} ?>
+                <div class="col-xs-6 col-sm-2" style="margin-top: 20px"><?php echo createTeamToggleButton($team, $teams_filter) ?></div>
+<?php } ?>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 btn-group">
-<?php
-            $weeks_options = array(2, 40);
-            $weeks_active = $weeks_options[0];
-            if (isset($_GET['weeks']) && in_array($_GET['weeks'], $weeks_options)) {
-                $weeks_active = $_GET['weeks'];
-            }
-            foreach ($weeks_options as $weeks_option) {
+            <?php foreach ($weeks_options as $weeks_option) {
                 echo createWeeksButton($weeks_option, $weeks_active);
-            }
-            ?>
+            } ?>
         </div>
     </div>
     <br/>
     <div class="row">
         <div class="col-xs-12">
             <?php
-            foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active) as $time => $gameDay) {
+            foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams) as $time => $gameDay) {
                 echo createGameDayHTML($time, $gameDay);
             } ?>
         </div>
