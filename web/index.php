@@ -19,7 +19,7 @@
                     <button class="btn btn-default" data-toggle="collapse" data-target="#team-toggle-buttons">
                         ändern
                     </button>
-                    <button id="btn-reset-teams" class="btn btn-default">zurücksetzen</button>
+                    <a class="btn btn-default" href=".">zurücksetzen</a>
                 </div>
                 <div id="team-toggle-buttons" class="panel-body row collapse">
 <?php foreach (getTeams() as $team) { ?>

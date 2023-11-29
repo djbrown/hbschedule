@@ -26,8 +26,4 @@ $(function () {
             }
         }
     });
-    $("#btn-reset-teams").click(function (e) {
-        $(".team-toggle").removeClass("active");
-        $('.game-list-item').show();
-    });
 });
