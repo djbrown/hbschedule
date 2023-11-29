@@ -38,7 +38,7 @@ function getCurrentGamesByDateAndIsHomeGame($weeks): array
     return $currentGamesByDateAndIsHomeGame;
 }
 
-function getAllGamesFromFile():array
+function getAllGamesFromFile(): array
 {
     global $dataFileName;
     if (!file_exists($dataFileName)) {
@@ -54,7 +54,7 @@ function dump($var)
     error_log(var_export($var, true));
 }
 
-function getGameDate($game):DateTime
+function getGameDate($game): DateTime
 {
     if ($game->gDate === "") {
         $date = date_create("last month");
@@ -111,6 +111,15 @@ function createTeamToggleButton($team): string
 HTML;
 }
 
+function createWeeksButton($weeks_option, $weeks_active): string
+{
+    $active = ($weeks_option === $weeks_active) ? ' active' : '';
+    #$url = '?' . teamButtonURL($team);
+    return <<<HTML
+<a class="btn btn-default$active" href="?weeks=$weeks_option">nächste $weeks_option Wochen</a>
+HTML;
+}
+
 function createGameDayHTML($time, $gameDay): string
 {
     $date = strftime("%A %d.%m.", $time);
@@ -150,7 +159,7 @@ function createTeamLabel($teamID): string
 HTML;
 }
 
-function createLocationLabel($game):string
+function createLocationLabel($game): string
 {
     if ($game->isHomeGame) {
         if (isInReblandhalle($game)) {

@@ -34,22 +34,22 @@
     <div class="row">
         <div class="col-xs-12 btn-group">
 <?php
-            $weeks_available = array(2, 40);
-            $weeks = $weeks_available[0];
-            if (isset($_GET['weeks']) && in_array($_GET['weeks'], $weeks_available)) {
-                $weeks = $_GET['weeks'];
+            $weeks_options = array(2, 40);
+            $weeks_active = $weeks_options[0];
+            if (isset($_GET['weeks']) && in_array($_GET['weeks'], $weeks_options)) {
+                $weeks_active = $_GET['weeks'];
             }
-            foreach($weeks_available as $w) {
-                $active = ($w == $weeks) ? ' active' : '';?>
-            <?php echo '<a href="?weeks=' . $w .'" class="btn btn-default' . $active . '">nächste ' . $w . ' Wochen</a>' . "\n";?>
-<?php } ?>
+            foreach ($weeks_options as $weeks_option) {
+                echo createWeeksButton($weeks_option, $weeks_active);
+            }
+            ?>
         </div>
     </div>
     <br/>
     <div class="row">
         <div class="col-xs-12">
             <?php
-            foreach (getCurrentGamesByDateAndIsHomeGame($weeks) as $time => $gameDay) {
+            foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active) as $time => $gameDay) {
                 echo createGameDayHTML($time, $gameDay);
             } ?>
         </div>
