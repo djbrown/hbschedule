@@ -122,7 +122,7 @@ HTML;
 
 function createGameDayHTML($time, $gameDay): string
 {
-    $date = strftime("%A %d.%m.", $time);
+    $date = datefmt_format(datefmt_create("de-DE", pattern: "eee dd.LL.yyyy"), $time);
     $gamesHTML = "";
     foreach ($gameDay as $key => $game) {
         $gamesHTML .= createGameHTML($game);
