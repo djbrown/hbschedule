@@ -12,52 +12,39 @@ $teams_filter = $_GET['teams'] ?? array();
 
 ?>
 
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="de">
+
 <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Interaktive Vorschau kommender Spiele von <?php echo getenv('CLUB_NAME'); ?>" />
     <title><?php echo getenv('CLUB_NAME'); ?> Spielvorschau</title>
-    <meta name="description" content="Interaktive Vorschau kommender Spiele von <?php echo getenv('CLUB_NAME'); ?>"/>
-
-    <?php require "head-base.php"; ?>
-
-    <script src="/js/hbschedule.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
+
 <body>
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="panel panel-default">
-                <div class=" panel-heading">
-                    <h4>Filter</h4>
-                    <button class="btn btn-default" data-toggle="collapse" data-target="#team-toggle-buttons">
-                        ändern
-                    </button>
-                    <a class="btn btn-default" href=".">zurücksetzen</a>
-                </div>
-                <div id="team-toggle-buttons" class="panel-body row collapse">
-<?php foreach (getTeams() as $team) { ?>
-                <div class="col-xs-6 col-sm-2" style="margin-top: 20px"><?php echo createTeamToggleButton($team, $teams_filter) ?></div>
-<?php } ?>
-                </div>
+    <div class="container">
+        <div class="d-grid gap-2 d-sm-block my-3">
+            <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#team-toggle-buttons">Teams</button>
+            <a class="btn btn-secondary" href=".">zurücksetzen</a>
+            <div class="btn-group">
+                <?php foreach ($weeks_options as $weeks_option) {
+                    echo createWeeksButton($weeks_option, $weeks_active);
+                } ?>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12 btn-group">
-            <?php foreach ($weeks_options as $weeks_option) {
-                echo createWeeksButton($weeks_option, $weeks_active);
-            } ?>
+        <div id="team-toggle-buttons" class=" collapse">
+            <?php foreach (getTeams() as $team) { ?>
+                <div class="col-xs-6 col-sm-2" style="margin-top: 20px"><?php echo createTeamToggleButton($team, $teams_filter) ?></div>
+            <?php } ?>
         </div>
+        <?php
+        foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams_filter) as $time => $gameDay) {
+            echo createGameDayHTML($time, $gameDay);
+        } ?>
     </div>
-    <br/>
-    <div class="row">
-        <div class="col-xs-12">
-            <?php
-            foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams) as $time => $gameDay) {
-                echo createGameDayHTML($time, $gameDay);
-            } ?>
-        </div>
-    </div>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
+
 </html>

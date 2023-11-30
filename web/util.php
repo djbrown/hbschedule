@@ -123,17 +123,17 @@ function teamButtonURL($team): string
 function createTeamToggleButton($team, $teams_filter): string
 {
     $url = "?" . teamButtonURL($team);
-    $active = (in_array($team->teamID, $teams_filter)) ? " active" : "";
+    $outline = (in_array($team->teamID, $teams_filter)) ? "" : "outline-";
     return <<<HTML
-<a class="btn btn-block btn-$team->color$active" href="$url">$team->name</a>
+<a class="btn btn-block btn-$outline$team->color" href="$url">$team->name</a>
 HTML;
 }
 
 function createWeeksButton($weeks_option, $weeks_active): string
 {
-    $active = ($weeks_option === $weeks_active) ? " active" : "";
+    $btn = ($weeks_option == $weeks_active) ? "btn-secondary" : "btn-outline-secondary";
     return <<<HTML
-<a class="btn btn-default$active" href="?weeks=$weeks_option">nächste $weeks_option Wochen</a>
+<a class="btn $btn" href="?weeks=$weeks_option">nächste $weeks_option Wochen</a>
 HTML;
 }
 
@@ -145,46 +145,46 @@ function createGameDayHTML($time, $gameDay): string
         $gamesHTML .= createGameHTML($game);
     }
     return <<<HTML
-<ul class="list-group">
-    <li class="list-group-item list-group-item-danger">
-        <h4 class="list-group-item-heading">$date</h4>
-    </li>
-    $gamesHTML
-</ul>
+<div class="row mb-3">
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-danger">
+            <h4>$date</h4>
+        </li>
+        $gamesHTML
+    </ul>
+</div>
 HTML;
 }
 
 function createGameHTML($game): string
 {
-    $locationLabel = createLocationLabel($game);
-    $teamLabel = createTeamLabel($game->teamID);
+    $locationBadge = createLocationBadge($game);
+    $teamBadge = createTeamBadge($game->teamID);
     return <<<HTML
     <li class="list-group-item game-list-item">
         <strong>$game->gTime Uhr</strong>&nbsp;<span>$game->gClassSname:</span>
         <span>$game->gHomeTeam</span> - <span>$game->gGuestTeam</span>
         <br/>
-        $teamLabel$locationLabel
+        $teamBadge$locationBadge
     </li>
 HTML;
 }
 
-function createTeamLabel($teamID): string
+function createTeamBadge($teamID): string
 {
     $team = getTeams()[$teamID];
     return <<<HTML
-<span class="label label-$team->color">$team->name</span>
+<span class="badge bg-$team->color">$team->name</span>
 HTML;
 }
 
-function createLocationLabel($game): string
+function createLocationBadge($game): string
 {
     if ($game->isHomeGame) {
         if (isInReblandhalle($game)) {
-            return '&nbsp;<span class="label label-success">Reblandhalle</span>';
+            return '&nbsp;<span class="badge bg-success">Reblandhalle</span>';
         } else if (isInParkringhalle($game)) {
-            return '&nbsp;<span class="label label-danger">Parkringhalle</span>';
-        } else {
-            return '&nbsp;<span class="label label-default">andere Halle</span>';
+            return '&nbsp;<span class="badge bg-danger">Parkringhalle</span>';
         }
     }
     return "";
