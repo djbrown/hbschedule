@@ -125,7 +125,7 @@ function createTeamToggleButton($team, $teams_filter): string
     $url = "?" . teamButtonURL($team);
     $outline = (in_array($team->teamID, $teams_filter)) ? "" : "outline-";
     return <<<HTML
-<a class="btn btn-block btn-$outline$team->color" href="$url">$team->name</a>
+<a class="btn d-block btn-$outline$team->color" href="$url">$team->name</a>
 HTML;
 }
 
@@ -145,14 +145,10 @@ function createGameDayHTML($time, $gameDay): string
         $gamesHTML .= createGameHTML($game);
     }
     return <<<HTML
-<div class="row mb-3">
-    <ul class="list-group">
-        <li class="list-group-item list-group-item-danger">
-            <h4>$date</h4>
-        </li>
-        $gamesHTML
-    </ul>
-</div>
+<li class="list-group-item list-group-item-danger">
+    <h4>$date</h4>
+</li>
+$gamesHTML
 HTML;
 }
 

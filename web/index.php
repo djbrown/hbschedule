@@ -25,7 +25,7 @@ $teams_filter = $_GET['teams'] ?? array();
 
 <body>
     <div class="container">
-        <div class="d-grid gap-2 d-sm-block my-3">
+        <div class="d-grid gap-2 d-sm-block my-2">
             <button class="btn btn-secondary" data-bs-toggle="collapse" data-bs-target="#team-toggle-buttons">Teams</button>
             <a class="btn btn-secondary" href=".">zurücksetzen</a>
             <div class="btn-group">
@@ -34,15 +34,20 @@ $teams_filter = $_GET['teams'] ?? array();
                 } ?>
             </div>
         </div>
-        <div id="team-toggle-buttons" class=" collapse">
-            <?php foreach (getTeams() as $team) { ?>
-                <div class="col-xs-6 col-sm-2" style="margin-top: 20px"><?php echo createTeamToggleButton($team, $teams_filter) ?></div>
-            <?php } ?>
+        <div id="team-toggle-buttons" class="collapse card card-body my-2">
+            <div class="row row-cols-3 row-cols-sm-4 row-cols-md-6 g-2">
+                <?php foreach (getTeams() as $team) { ?>
+                    <div class="col">
+                        <?php echo createTeamToggleButton($team, $teams_filter) ?>
+                    </div>
+                <?php } ?>
+            </div>
         </div>
-        <?php
-        foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams_filter) as $time => $gameDay) {
-            echo createGameDayHTML($time, $gameDay);
-        } ?>
+        <?php foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams_filter) as $time => $gameDay) { ?>
+            <ul class="list-group my-2">
+                <?php echo createGameDayHTML($time, $gameDay); ?>
+            </ul>
+        <?php } ?>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
