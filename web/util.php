@@ -117,23 +117,35 @@ function teamButtonURL($team): string
         $params["teams"][] = $team->teamID;
     }
 
-    return http_build_query($params);
+    $url = http_build_query($params);
+    $url = preg_replace('/%5B[0-9]+%5D/simU', '%5B%5D', $url);
+    return "?$url";
 }
 
 function createTeamToggleButton($team, $teams_filter): string
 {
-    $url = "?" . teamButtonURL($team);
+    $url = teamButtonURL($team);
     $outline = (in_array($team->teamID, $teams_filter)) ? "" : "outline-";
     return <<<HTML
 <a class="btn d-block btn-$outline$team->color" href="$url">$team->name</a>
 HTML;
 }
 
+function weekButtonURL($week): string
+{
+    $params = $_GET;
+    $params["week"] = $week;
+    $url = http_build_query($params);
+    $url = preg_replace('/%5B[0-9]+%5D/simU', '%5B%5D', $url);
+    return "?$url";
+}
+
 function createWeeksButton($weeks_option, $weeks_active): string
 {
     $btn = ($weeks_option == $weeks_active) ? "btn-secondary" : "btn-outline-secondary";
+    $url = weekButtonURL($weeks_option);
     return <<<HTML
-<a class="btn $btn" href="?weeks=$weeks_option">nächste $weeks_option Wochen</a>
+<a class="btn $btn" href="$url">nächste $weeks_option Wochen</a>
 HTML;
 }
 
