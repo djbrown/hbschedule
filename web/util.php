@@ -7,7 +7,7 @@ setlocale(LC_TIME, "de_DE@euro", "de_DE", "de", "ge");
 
 $dataFileName = dirname(__FILE__) . "/data.json";
 
-function getCurrentGamesByDateAndIsHomeGame($weeks): array
+function getCurrentGamesByDateAndIsHomeGame($weeks, $teams): array
 {
     $allGames = getAllGamesFromFile();
     $minDate = new DateTime("yesterday");
@@ -16,7 +16,7 @@ function getCurrentGamesByDateAndIsHomeGame($weeks): array
     $currentGamesByDateAndIsHomeGame = array();
     foreach ($allGames as $game) {
         $game->date = getGameDate($game);
-        if ($game->date < $minDate || $game->date > $maxDate) {
+        if ($game->date < $minDate || $game->date > $maxDate || !in_array($game->teamID, $teams)) {
             continue;
         } else {
             $time = $game->date->getTimestamp();
@@ -26,7 +26,6 @@ function getCurrentGamesByDateAndIsHomeGame($weeks): array
             if (!isset($currentGamesByDateAndIsHomeGame[$time])) {
                 $currentGamesByDateAndIsHomeGame[$time] = array();
             }
-            //$game->caterers = getGameCaterers($game);
             array_push($currentGamesByDateAndIsHomeGame[$time], $game);
         }
     }

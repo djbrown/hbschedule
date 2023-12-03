@@ -9,6 +9,7 @@ if (isset($_GET['weeks']) && in_array($_GET['weeks'], $weeks_options)) {
 }
 
 $teams_filter = $_GET['teams'] ?? array();
+$teams = $_GET['teams'] ?? getTeams();
 
 ?>
 
@@ -48,7 +49,7 @@ $teams_filter = $_GET['teams'] ?? array();
                 <?php } ?>
             </div>
         </div>
-        <?php foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams_filter) as $time => $gameDay) { ?>
+        <?php foreach (getCurrentGamesByDateAndIsHomeGame($weeks_active, $teams) as $time => $gameDay) { ?>
             <ul class="list-group my-2">
                 <?php echo createGameDayHTML($time, $gameDay); ?>
             </ul>
