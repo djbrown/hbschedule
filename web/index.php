@@ -9,7 +9,7 @@ if (isset($_GET['weeks']) && in_array($_GET['weeks'], $weeks_options)) {
 }
 
 $teams_filter = $_GET['teams'] ?? array();
-$teams = $_GET['teams'] ?? getTeams();
+$teams = $_GET['teams'] ?? array_keys(getTeams());
 
 ?>
 
