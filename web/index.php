@@ -21,6 +21,11 @@ $teams_filter = $_GET['teams'] ?? array();
     <meta name="description" content="Interaktive Vorschau kommender Spiele von <?php echo getenv('CLUB_NAME'); ?>" />
     <title><?php echo getenv('CLUB_NAME'); ?> Spielvorschau</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script>
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+        }
+    </script>
 </head>
 
 <body>
