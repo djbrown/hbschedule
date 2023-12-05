@@ -130,10 +130,10 @@ function createTeamToggleButton($team, $teams_filter): string
 HTML;
 }
 
-function weekButtonURL($week): string
+function weeksButtonURL($weeks): string
 {
     $params = $_GET;
-    $params["week"] = $week;
+    $params["weeks"] = $weeks;
     $url = http_build_query($params);
     $url = preg_replace('/%5B[0-9]+%5D/simU', '%5B%5D', $url);
     return "?$url";
@@ -142,7 +142,7 @@ function weekButtonURL($week): string
 function createWeeksButton($weeks_option, $weeks_active): string
 {
     $btn = ($weeks_option == $weeks_active) ? "btn-secondary" : "btn-outline-secondary";
-    $url = weekButtonURL($weeks_option);
+    $url = weeksButtonURL($weeks_option);
     return <<<HTML
 <a class="btn $btn" href="$url">nächste $weeks_option Wochen</a>
 HTML;
